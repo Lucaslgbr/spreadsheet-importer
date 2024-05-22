@@ -1,11 +1,25 @@
 from fastapi import FastAPI, File, UploadFile, Depends, HTTPException
 import pandas as pd
 from app.auth.auth_bearer import JWTBearer
+from fastapi.middleware.cors import CORSMiddleware
 
 
 upload_files = []
 
 app = FastAPI()
+
+origins = [
+    "*"
+]
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.post("/uploadfile/")
