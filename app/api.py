@@ -1,8 +1,8 @@
-from fastapi import FastAPI, File, UploadFile, Depends, HTTPException
-import pandas as pd
+from fastapi import FastAPI, File, UploadFile, Depends, HTTPException, Form, Query
 from app.auth.auth_bearer import JWTBearer
 from fastapi.middleware.cors import CORSMiddleware
-
+from app.models import FileSchema
+from pydantic import EmailStr
 
 upload_files = []
 
@@ -12,7 +12,6 @@ origins = [
     "*"
 ]
 
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -21,10 +20,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 @app.post("/uploadfile/")
-async def upload_file(file: UploadFile = File(...), token: str = Depends(JWTBearer())):
-    if not file.filename.endswith('.xls'):
-        raise HTTPException(status_code=400, detail="Por favor, envie um arquivo XLS.")
+async def upload_file(
+    file: UploadFile = File(...), 
+    user_email: EmailStr = Form(...), 
+    token: str = Depends(JWTBearer())
+):
+    if not file.filename.endswith('.csv'):
+        raise HTTPException(status_code=400, detail="Por favor, envie um arquivo CSV.")
     
-    return {"data": 'Leitura de dados', "token": token}
+    file_data = FileSchema(name=file.filename, user_email=user_email)
+    upload_files.append(file_data)
+    return {"data": 'Processamento de dados iniciado'}
+
+@app.get("/get_list/")
+async def get_list(
+    token: str = Depends(JWTBearer()), 
+    user_email: EmailStr = Query(...)
+):
+    filtered_files = [file for file in upload_files if file.user_email == user_email]
+    return {"data": filtered_files}
