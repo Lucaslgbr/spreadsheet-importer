@@ -3,6 +3,7 @@ from app.auth.auth_bearer import JWTBearer
 from fastapi.middleware.cors import CORSMiddleware
 from app.models import FileSchema
 from pydantic import EmailStr
+from app.rabbitmq import publish_to_rabbitmq
 
 upload_files = []
 
@@ -31,6 +32,12 @@ async def upload_file(
     
     file_data = FileSchema(name=file.filename, user_email=user_email)
     upload_files.append(file_data)
+    message = {
+        "email": user_email,
+        "details": "Planilha processada",
+        "user": user_email
+    }
+    publish_to_rabbitmq(message)
     return {"data": 'Processamento de dados iniciado'}
 
 @app.get("/get_list/")

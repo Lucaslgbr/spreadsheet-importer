@@ -2,7 +2,9 @@ version: "1"
 networks:
   services:
     external: true
-
+  rabbitmq-network:
+    external: true
+      
 services:
   sheet:
     build:
@@ -15,6 +17,7 @@ services:
       - /app/.venv
     networks:
       - services
+      - rabbitmq-network
     expose:
       - 8001
     command: >
