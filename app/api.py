@@ -1,9 +1,10 @@
 from fastapi import FastAPI, File, UploadFile, Depends, HTTPException, Form, Query
-from app.auth.auth_bearer import JWTBearer
 from fastapi.middleware.cors import CORSMiddleware
-from app.models import FileSchema
 from pydantic import EmailStr
+from app.auth.auth_bearer import JWTBearer
+from app.models import FileSchema
 from app.rabbitmq import publish_to_rabbitmq
+import asyncio
 
 upload_files = []
 
@@ -21,15 +22,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+async def delayed_publish(message: dict):
+    await asyncio.sleep(15)  # Espera 15 segundos
+    publish_to_rabbitmq(message)
+
 @app.post("/uploadfile/")
 async def upload_file(
     file: UploadFile = File(...), 
     user_email: EmailStr = Form(...), 
     token: str = Depends(JWTBearer())
 ):
-    # if not file.filename.endswith('.csv'):
-    #     raise HTTPException(status_code=400, detail="Por favor, envie um arquivo CSV.")
-    
     file_data = FileSchema(name=file.filename, user_email=user_email)
     upload_files.append(file_data)
     message = {
@@ -37,7 +39,7 @@ async def upload_file(
         "details": "Planilha processada",
         "user": user_email
     }
-    publish_to_rabbitmq(message)
+    asyncio.create_task(delayed_publish(message))
     return {"data": 'Processamento de dados iniciado'}
 
 @app.get("/get_list/")
