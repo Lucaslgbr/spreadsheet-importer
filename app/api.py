@@ -26,8 +26,8 @@ async def upload_file(
     user_email: EmailStr = Form(...), 
     token: str = Depends(JWTBearer())
 ):
-    if not file.filename.endswith('.csv'):
-        raise HTTPException(status_code=400, detail="Por favor, envie um arquivo CSV.")
+    # if not file.filename.endswith('.csv'):
+    #     raise HTTPException(status_code=400, detail="Por favor, envie um arquivo CSV.")
     
     file_data = FileSchema(name=file.filename, user_email=user_email)
     upload_files.append(file_data)
