@@ -1,0 +1,6 @@
+
+app/core/services/__pycache__/
+
+app/core/middleware/__pycache__/
+
+*.pyc

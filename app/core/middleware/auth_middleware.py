@@ -1,6 +1,6 @@
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from core.ports.auth_port import AuthPort
+from app.core.ports.auth_port import AuthPort
 
 class JWTBearer(HTTPBearer):
     def __init__(self, auth_service: AuthPort, auto_error: bool = True):

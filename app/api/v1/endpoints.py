@@ -1,12 +1,15 @@
 from fastapi import APIRouter, UploadFile, File, Depends, Form, HTTPException
 from pydantic import EmailStr, BaseModel
-from core.services.import_service import ImportService
-from core.services.publish_service import PublishService
-from adapters.csv_reader import CsvReader
-from adapters.database import Database
-from adapters.auth_adapter import AuthAdapter
-from adapters.rabbitmq_adapter import RabbitMQAdapter
-from core.middleware.auth_middleware import JWTBearer
+from app.core.services.import_service import ImportService
+from app.core.services.publish_service import PublishService
+from app.adapters.csv_reader.csv_reader_model1 import CsvReaderModel1
+from app.adapters.csv_reader.csv_reader_model2 import CsvReaderModel2
+from app.adapters.csv_reader.csv_reader_model3 import CsvReaderModel3
+from app.adapters.csv_reader.csv_reader_model4 import CsvReaderModel4
+from app.adapters.database import Database
+from app.adapters.auth_adapter import AuthAdapter
+from app.adapters.rabbitmq_adapter import RabbitMQAdapter
+from app.core.middleware.auth_middleware import JWTBearer
 
 router = APIRouter()
 
@@ -14,9 +17,20 @@ router = APIRouter()
 async def upload_file(
     file: UploadFile = File(...), 
     user_email: EmailStr = Form(...), 
+    model_type: int = Form(...), 
     token: str = Depends(JWTBearer(AuthAdapter()))
 ):
-    csv_reader = CsvReader()
+    if model_type == 1:
+        csv_reader = CsvReaderModel1()
+    elif model_type == 2:
+        csv_reader = CsvReaderModel2()
+    elif model_type == 3:
+        csv_reader = CsvReaderModel3()
+    elif model_type == 4:
+        csv_reader = CsvReaderModel4()
+    else:
+        raise HTTPException(status_code=400, detail="Invalid model type")
+
     db_adapter = Database()
     import_service = ImportService(csv_reader, db_adapter)
     

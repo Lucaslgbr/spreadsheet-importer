@@ -1,7 +1,7 @@
 import pika
 import json
 import os
-from core.ports.message_broker_port import MessageBrokerPort
+from app.core.ports.message_broker_port import MessageBrokerPort
 
 RABBITMQ_HOST = os.getenv('RABBITMQ_HOST', 'rabbitmq')
 RABBITMQ_QUEUE = os.getenv('RABBITMQ_QUEUE', 'notifications')

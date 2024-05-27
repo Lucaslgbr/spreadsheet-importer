@@ -1,14 +1,14 @@
 import requests
 import logging
 import os
-from core.ports.auth_port import AuthPort
+from app.core.ports.auth_port import AuthPort
 from fastapi import HTTPException
 
-# Configurar logging
+#configuração de log
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Usar o nome do serviço Docker como endereço do serviço de autenticação
+# endereco do microserviço de auth
 AUTH_SERVICE_URL = os.getenv("AUTH_SERVICE_URL", "http://auth:8000/validate-token")
 
 class AuthAdapter(AuthPort):

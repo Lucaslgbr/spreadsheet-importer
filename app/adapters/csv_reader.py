@@ -1,6 +1,6 @@
 import csv
 from typing import List
-from core.ports.csv_port import CsvPort
+from app.core.ports.csv_port import CsvPort
 
 class CsvReader(CsvPort):
     def read_csv(self, file_path: str) -> List[dict]:
