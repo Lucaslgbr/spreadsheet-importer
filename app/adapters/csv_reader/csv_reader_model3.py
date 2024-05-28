@@ -6,7 +6,7 @@ class CsvReaderModel3(CsvPort):
     def read(self, file_path: str) -> Spreadsheet:
         data = []
         with open(file_path, newline='', encoding='utf-8') as csvfile:
-            reader = csv.DictReader(csvfile)
+            reader = csv.DictReader(csvfile, delimiter=';')
             for row in reader:
                 data.append({
                     "Data": row["Data"],
