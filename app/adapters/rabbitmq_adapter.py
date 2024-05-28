@@ -18,7 +18,7 @@ class RabbitMQAdapter(MessageBrokerPort):
             routing_key=RABBITMQ_QUEUE,
             body=json.dumps(message),
             properties=pika.BasicProperties(
-                delivery_mode=2,  # make message persistent
+                delivery_mode=2,
             )
         )
         connection.close()
