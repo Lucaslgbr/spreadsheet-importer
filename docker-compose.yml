@@ -1,10 +1,10 @@
-version: "1"
+version: "3.8"
 networks:
   services:
     external: true
   rabbitmq-network:
     external: true
-      
+
 services:
   sheet:
     build:
@@ -18,9 +18,25 @@ services:
     networks:
       - services
       - rabbitmq-network
+    depends_on:
+      - db
     expose:
       - 8001
     command: >
       sh -c "
       python main.py
       "
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: spreadsheet_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - services
+
+
+volumes:
+  postgres_data:
