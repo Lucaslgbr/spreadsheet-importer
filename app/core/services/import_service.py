@@ -9,7 +9,6 @@ class ImportService:
         self.db_adapter = db_adapter
 
     async def import_spreadsheet(self, file_path: str, user_id: str, file_name: str):
-        await asyncio.sleep(5)  
         csv_adapter = identify_csv_model(file_path)  
         spreadsheet = csv_adapter.read_csv(file_path)
         self.db_adapter.save_spreadsheet(spreadsheet, user_id, file_name)
