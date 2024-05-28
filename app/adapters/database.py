@@ -5,7 +5,6 @@ from app.core.entities.spreadsheet import Spreadsheet
 import os
 import json
 
-# Use the DATABASE_URL from environment variables
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@db:5432/spreadsheet_db")
 
 class Database(DatabasePort):
@@ -14,11 +13,10 @@ class Database(DatabasePort):
         self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
         self.metadata = MetaData()
 
-        # Define a única tabela para todos os modelos de planilhas
         self.spreadsheets_table = Table('spreadsheets', self.metadata,
                                         Column('id', Integer, primary_key=True, index=True),
                                         Column('user_id', String, nullable=False),
-                                        Column('data', String, nullable=False))  # Coluna para armazenar JSON
+                                        Column('data', String, nullable=False))  
 
         self.metadata.create_all(self.engine)
 
@@ -26,7 +24,7 @@ class Database(DatabasePort):
         session = self.SessionLocal()
         table = self.spreadsheets_table
         try:
-            json_data = json.dumps(spreadsheet.data)  # Converte os dados em JSON
+            json_data = json.dumps(spreadsheet.data) 
             insert_stmt = table.insert().values(user_id=user_id, data=json_data)
             session.execute(insert_stmt)
             session.commit()
