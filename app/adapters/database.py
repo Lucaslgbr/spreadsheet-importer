@@ -17,8 +17,7 @@ class Database(DatabasePort):
                                         Column('id', Integer, primary_key=True, index=True),
                                         Column('user_id', String, nullable=False),
                                         Column('data', String, nullable=False),
-                                        Column('file_name', String, nullable=False))  # Adiciona a coluna file_name
-
+                                        Column('file_name', String, nullable=False)) 
         self.metadata.create_all(self.engine)
 
     def save_spreadsheet(self, spreadsheet: Spreadsheet, user_id: str, file_name: str):
