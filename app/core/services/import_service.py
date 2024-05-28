@@ -7,7 +7,7 @@ class ImportService:
     def __init__(self, db_adapter: DatabasePort):
         self.db_adapter = db_adapter
 
-    def import_spreadsheet(self, file_path: str, user_id: str):
+    def import_spreadsheet(self, file_path: str, user_id: str, file_name: str):
         csv_adapter = identify_csv_model(file_path)  # Identifica o modelo do CSV
         spreadsheet = csv_adapter.read_csv(file_path)
-        self.db_adapter.save_spreadsheet(spreadsheet, user_id)
+        self.db_adapter.save_spreadsheet(spreadsheet, user_id, file_name)

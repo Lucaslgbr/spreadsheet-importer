@@ -8,10 +8,10 @@ from app.adapters.csv_reader.csv_reader_model4 import CsvReaderModel4
 
 def identify_csv_model(file_path: str) -> CsvPort:
     with codecs.open(file_path, 'r', encoding='utf-8-sig') as csvfile:
-        reader = csv.reader(csvfile, delimiter=';')
+        reader = csv.reader((line.replace('\0', '') for line in csvfile), delimiter=';')
         headers = next(reader)
-        headers = [header.strip().lower() for header in headers]  
-        
+        headers = [header.strip().lower() for header in headers if header.strip()]
+        print(headers)
         model1_headers = {"data", "descrição", "referencia", "nota fiscal", "entrada", "saida"}
         model2_headers = {"data", "descrição", "valor", "descricao"}
         model3_headers = {"data", "descrição", "documento", "crédito", "débito", "saldo"}
@@ -26,4 +26,4 @@ def identify_csv_model(file_path: str) -> CsvPort:
         elif set(headers) == model4_headers:
             return CsvReaderModel4()
         else:
-            raise ValueError("CSV model not recognized")
+            raise ValueError("Modelo não reconhecido")
