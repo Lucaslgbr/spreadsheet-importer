@@ -33,10 +33,10 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: spreadsheet_db
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - spreadsheet_postgres_data:/var/lib/postgresql/data
     networks:
       - services
 
 
 volumes:
-  postgres_data:
+  spreadsheet_postgres_data:
