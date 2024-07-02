@@ -1,10 +1,11 @@
 FROM python:3.9
 
-WORKDIR /app
+WORKDIR /code
 
-COPY requirements.txt .
+COPY requirements.txt /code/requirements.txt
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip \
+    && pip install --no-cache-dir --progress-bar off --no-color -r /code/requirements.txt
 
 COPY . .
 
