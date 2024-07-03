@@ -9,8 +9,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # endereco do microserviço de auth
-AUTH_SERVICE_URL = os.getenv("AUTH_SERVICE_URL", "http://auth:8000/validate-token")
-
+AUTH_SERVICE_URL = os.getenv("AUTH_SERVICE_URL", "http://167.234.246.29:8001/validate-token")
+# http://auth:8000/validate-token
 class AuthAdapter(AuthPort):
     def verify_jwt(self, jwtoken: str) -> bool:
         try:
